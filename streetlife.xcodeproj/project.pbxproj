@@ -1,0 +1,280 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		86BC017915B6773800CEAEC6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BC017815B6773800CEAEC6 /* UIKit.framework */; };
+		86BC017B15B6773800CEAEC6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BC017A15B6773800CEAEC6 /* Foundation.framework */; };
+		86BC017D15B6773800CEAEC6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BC017C15B6773800CEAEC6 /* CoreGraphics.framework */; };
+		86BC018315B6773800CEAEC6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86BC018115B6773800CEAEC6 /* InfoPlist.strings */; };
+		86BC018515B6773800CEAEC6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BC018415B6773800CEAEC6 /* main.m */; };
+		86BC018915B6773800CEAEC6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BC018815B6773800CEAEC6 /* AppDelegate.m */; };
+		86BC018C15B6773800CEAEC6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BC018B15B6773800CEAEC6 /* ViewController.m */; };
+		86BC018F15B6773800CEAEC6 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86BC018D15B6773800CEAEC6 /* ViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		86BC017415B6773800CEAEC6 /* streetlife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = streetlife.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86BC017815B6773800CEAEC6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		86BC017A15B6773800CEAEC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		86BC017C15B6773800CEAEC6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		86BC018015B6773800CEAEC6 /* streetlife-Info.plist */ = {isa = PBXFileReference; path = "streetlife-Info.plist"; sourceTree = "<group>"; };
+		86BC018215B6773800CEAEC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		86BC018415B6773800CEAEC6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		86BC018615B6773800CEAEC6 /* streetlife-Prefix.pch */ = {isa = PBXFileReference; path = "streetlife-Prefix.pch"; sourceTree = "<group>"; };
+		86BC018715B6773800CEAEC6 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		86BC018815B6773800CEAEC6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		86BC018A15B6773800CEAEC6 /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
+		86BC018B15B6773800CEAEC6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		86BC018E15B6773800CEAEC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		86BC017115B6773700CEAEC6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86BC017915B6773800CEAEC6 /* UIKit.framework in Frameworks */,
+				86BC017B15B6773800CEAEC6 /* Foundation.framework in Frameworks */,
+				86BC017D15B6773800CEAEC6 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		86BC016915B6773700CEAEC6 = {
+			isa = PBXGroup;
+			children = (
+				86BC017E15B6773800CEAEC6 /* streetlife */,
+				86BC017715B6773800CEAEC6 /* Frameworks */,
+				86BC017515B6773800CEAEC6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		86BC017515B6773800CEAEC6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				86BC017415B6773800CEAEC6 /* streetlife.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		86BC017715B6773800CEAEC6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				86BC017815B6773800CEAEC6 /* UIKit.framework */,
+				86BC017A15B6773800CEAEC6 /* Foundation.framework */,
+				86BC017C15B6773800CEAEC6 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		86BC017E15B6773800CEAEC6 /* streetlife */ = {
+			isa = PBXGroup;
+			children = (
+				86BC018715B6773800CEAEC6 /* AppDelegate.h */,
+				86BC018815B6773800CEAEC6 /* AppDelegate.m */,
+				86BC018A15B6773800CEAEC6 /* ViewController.h */,
+				86BC018B15B6773800CEAEC6 /* ViewController.m */,
+				86BC018D15B6773800CEAEC6 /* ViewController.xib */,
+				86BC017F15B6773800CEAEC6 /* Supporting Files */,
+			);
+			path = streetlife;
+			sourceTree = "<group>";
+		};
+		86BC017F15B6773800CEAEC6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				86BC018015B6773800CEAEC6 /* streetlife-Info.plist */,
+				86BC018115B6773800CEAEC6 /* InfoPlist.strings */,
+				86BC018415B6773800CEAEC6 /* main.m */,
+				86BC018615B6773800CEAEC6 /* streetlife-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		86BC017315B6773700CEAEC6 /* streetlife */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86BC019215B6773800CEAEC6 /* Build configuration list for PBXNativeTarget "streetlife" */;
+			buildPhases = (
+				86BC017015B6773700CEAEC6 /* Sources */,
+				86BC017115B6773700CEAEC6 /* Frameworks */,
+				86BC017215B6773700CEAEC6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = streetlife;
+			productName = streetlife;
+			productReference = 86BC017415B6773800CEAEC6 /* streetlife.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		86BC016B15B6773700CEAEC6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Kayac Inc.";
+			};
+			buildConfigurationList = 86BC016E15B6773700CEAEC6 /* Build configuration list for PBXProject "streetlife" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 86BC016915B6773700CEAEC6;
+			productRefGroup = 86BC017515B6773800CEAEC6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				86BC017315B6773700CEAEC6 /* streetlife */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		86BC017215B6773700CEAEC6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86BC018315B6773800CEAEC6 /* InfoPlist.strings in Resources */,
+				86BC018F15B6773800CEAEC6 /* ViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		86BC017015B6773700CEAEC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86BC018515B6773800CEAEC6 /* main.m in Sources */,
+				86BC018915B6773800CEAEC6 /* AppDelegate.m in Sources */,
+				86BC018C15B6773800CEAEC6 /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		86BC018115B6773800CEAEC6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				86BC018215B6773800CEAEC6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		86BC018D15B6773800CEAEC6 /* ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				86BC018E15B6773800CEAEC6 /* en */,
+			);
+			name = ViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		86BC019015B6773800CEAEC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		86BC019115B6773800CEAEC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		86BC019315B6773800CEAEC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "streetlife/streetlife-Prefix.pch";
+				INFOPLIST_FILE = "streetlife/streetlife-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		86BC019415B6773800CEAEC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "streetlife/streetlife-Prefix.pch";
+				INFOPLIST_FILE = "streetlife/streetlife-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		86BC016E15B6773700CEAEC6 /* Build configuration list for PBXProject "streetlife" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86BC019015B6773800CEAEC6 /* Debug */,
+				86BC019115B6773800CEAEC6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		86BC019215B6773800CEAEC6 /* Build configuration list for PBXNativeTarget "streetlife" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86BC019315B6773800CEAEC6 /* Debug */,
+				86BC019415B6773800CEAEC6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 86BC016B15B6773700CEAEC6 /* Project object */;
+}
