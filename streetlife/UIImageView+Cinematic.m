@@ -41,8 +41,13 @@
 - (void)rotated:(NSNotification*)n {
     // まわすぜぇー
     UIDeviceOrientation orientation = [[n object] orientation];
-    CGRect rect = [[UIScreen mainScreen] bounds];
+    if (orientation != UIDeviceOrientationUnknown) {
+        [self updateRotation:orientation];
+    }
+}
     
+- (void)updateRotation:(UIDeviceOrientation)orientation {
+    CGRect rect = [[UIScreen mainScreen] bounds];
     CGRect rotatedRect = {0};
     CGAffineTransform rotate = CGAffineTransformIdentity;
 
@@ -69,7 +74,7 @@
     if (rotatedRect.size.width != 0){
         // まわします
         UIView* scrollView = [self.subviews objectAtIndex:1];
-        UIView* imgView = [scrollView.subviews objectAtIndex:0];
+        UIImageView* imgView = [scrollView.subviews objectAtIndex:0];
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         [UIView beginAnimations:@"anim" context:context];
@@ -77,8 +82,10 @@
         scrollView.bounds = rotatedRect;
         [scrollView setTransform:rotate];
         //imgView.frame = CGRectMake(0, 0, scrollView.bounds.size.width, scrollView.bounds.size.height);
+        imgView.frame = [self calcImageRect:imgView.image.size withFrameRect:scrollView.bounds]; 
         //imgView.frame = rotatedRect;
         //[imgView setTransform:rotate];
+        [self updateImageViewOrigin];
         [UIView commitAnimations];
     }
 }
@@ -90,6 +97,24 @@
     [self updateImageViewOrigin];
 }
 
+- (CGRect)calcImageRect:(CGSize)imageSize withFrameRect:(CGRect)windowFrame {
+    
+	CGFloat imageAspect = imageSize.width / imageSize.height;
+	CGFloat frameAspect = windowFrame.size.width / windowFrame.size.height;
+    CGRect imageRect;
+	if (imageAspect >= frameAspect) {
+        // 横長だ = 上下に黒帯
+        imageRect = CGRectMake(0, 0, windowFrame.size.width, windowFrame.size.width * imageSize.height / imageSize.width);
+        imageRect.origin.y = (windowFrame.size.height - imageRect.size.height) / 2;
+    } else {
+        // 縦長だ = 左右に黒帯
+        imageRect = CGRectMake(0, 0, windowFrame.size.height * imageSize.width  / imageSize.height, windowFrame.size.height);
+        imageRect.origin.x = (windowFrame.size.width - imageRect.size.width) / 2;
+	}
+    
+    return imageRect;
+}                
+                         
 - (void)updateImageViewOrigin {
     // originを更新するぞ
     UIScrollView* scrollView = [self.subviews objectAtIndex:1];
@@ -191,20 +216,20 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
     bgView.alpha = 0.0;
 
     UIView* imgView = [[UIImageView alloc] initWithImage:self.image];
-    imgView.contentMode = self.contentMode;
     imgView.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    imgView.contentMode = self.contentMode;
 
     
     CGRect scrollViewRect = [self.superview convertRect:self.frame toView:view];
     UIScrollView* scrollView = [[UIScrollView alloc] initWithFrame:scrollViewRect];
     [scrollView addSubview:imgView];
-    scrollView.contentSize = imgView.bounds.size;
-    scrollView.minimumZoomScale = fminf(scrollView.bounds.size.width / self.image.size.width,
-                                        scrollView.bounds.size.height / self.image.size.height);
+    //scrollView.contentSize = imgView.bounds.size;
+    //scrollView.minimumZoomScale = fminf(scrollView.bounds.size.width / self.image.size.width,
+    //                                    scrollView.bounds.size.height / self.image.size.height);
     scrollView.maximumZoomScale = scrollView.minimumZoomScale * 5.0;
     scrollView.zoomScale = scrollView.minimumZoomScale;
 
-    scrollView.frame = scrollViewRect;
+    //scrollView.frame = scrollViewRect;
     scrollView.delegate = view;
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [scrollView addGestureRecognizer:gesture];
@@ -223,19 +248,7 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
 	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
 
     // calc rect (aspect fit)
-	CGFloat imageAspect = self.image.size.width / self.image.size.height;
-	CGFloat frameAspect = self.frame.size.width / self.frame.size.height;
-    CGRect imageRect;
-	if (imageAspect >= frameAspect) {
-        // 横長だ = 上下に黒帯
-        imageRect = CGRectMake(0, 0, windowFrame.size.width, windowFrame.size.width * self.image.size.height / self.image.size.width);
-        imageRect.origin.y = (windowFrame.size.height - imageRect.size.height) / 2;
-    } else {
-        // 縦長だ = 左右に黒帯
-        imageRect = CGRectMake(0, 0, windowFrame.size.height * self.image.size.width  / self.image.size.height, windowFrame.size.height);
-        imageRect.origin.x = (windowFrame.size.width - imageRect.size.width) / 2;
-	}
-
+    CGRect imageRect = [view calcImageRect:self.image.size withFrameRect:windowFrame];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
 	[UIView beginAnimations:@"anim" context:context];
@@ -250,14 +263,21 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
 	//}
 	[[UIApplication sharedApplication] setStatusBarHidden:TRUE withAnimation:UIStatusBarAnimationFade];
     imgView.frame = imageRect;
-    imgView.contentMode = UIViewContentModeScaleAspectFit;
+    //imgView.contentMode = UIViewContentModeScaleAspectFit;
     scrollView.frame = windowFrame;
     scrollView.minimumZoomScale = 1.0f;
     scrollView.maximumZoomScale = scrollView.minimumZoomScale * 5.0;
     scrollView.zoomScale = scrollView.minimumZoomScale;
     bgView.alpha = 1.0;
+    
+    // 現在の画面の向きに合わせて最初から回転を入れる
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if (orientation != UIDeviceOrientationPortrait) {
+        [view updateRotation:orientation];
+    }
     [UIView commitAnimations];
 }
+
 
 - (void)tapped:(id)sender {
     
@@ -269,27 +289,42 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
     UIView* imgView = [scrollView.subviews objectAtIndex:0];
     
     [UIView beginAnimations:@"restore_anim" context:context];
-    [UIView setAnimationDuration:0.4];
+    [UIView setAnimationDuration:0.3];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(endAnimation)];
     bgView.alpha = 0;
     //    CGRect shrinkFrame = self.frame;
     //    shrinkFrame.size.width = 
     
-    CGRect newFrame = [self.superview convertRect:self.frame toView:imgView];
+    CGRect newFrame = [self.superview convertRect:self.frame toView:view];
     //newFrame.origin.y -= 20;
-    [scrollView setTransform:CGAffineTransformIdentity];
-    scrollView.frame = newFrame;
-    //scrollView.zoomScale = 1.0f;
+    //imgView.contentMode = self.contentMode;
+    
+    //scrollView.zoomScale = scrollView.minimumZoomScale;
+    //[scrollView setTransform:CGAffineTransformIdentity];
+    //[scrollView zoomToRect:imgView.frame animated:NO];
     //scrollView.contentOffset = CGPointMake(0, 0);
     //scrollView.contentSize = imgView.bounds.size;
-    imgView.frame = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
-    imgView.contentMode = self.contentMode;
     
+    // 回転を元に戻す
+    scrollView.transform = CGAffineTransformIdentity;
+    // フレーム位置を調整
+    scrollView.frame = newFrame;
+
+    // 現在のScrollViewの表示領域にあわせてimgViewのRectを調整
+    CGRect newImageRect = CGRectZero;
+    newImageRect.origin = scrollView.contentOffset;
+    newImageRect.size = scrollView.bounds.size;
+    imgView.frame = newImageRect;
+
+    //[scrollView setContentOffset:CGPointZero];
+//    imgView.frame = scrollView.frame;
+    //imgView.center = scrollView.center;
+    //scrollView.contentSize = imgView.frame.size;
     
     [UIView commitAnimations];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:FALSE withAnimation:UIStatusBarAnimationFade];\
+    [[UIApplication sharedApplication] setStatusBarHidden:FALSE withAnimation:UIStatusBarAnimationFade];
     
 }
 
