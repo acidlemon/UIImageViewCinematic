@@ -37,6 +37,14 @@
     }
     return self;
 }
+
+- (void)endEnteringAnimation {
+    // 現在の画面の向きに合わせて回転を入れる
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if (orientation != UIDeviceOrientationPortrait) {
+        [self updateRotation:orientation];
+    }     
+}
     
 - (void)rotated:(NSNotification*)n {
     // まわすぜぇー
@@ -81,10 +89,7 @@
         [UIView setAnimationDuration:0.3];
         scrollView.bounds = rotatedRect;
         [scrollView setTransform:rotate];
-        //imgView.frame = CGRectMake(0, 0, scrollView.bounds.size.width, scrollView.bounds.size.height);
         imgView.frame = [self calcImageRect:imgView.image.size withFrameRect:scrollView.bounds]; 
-        //imgView.frame = rotatedRect;
-        //[imgView setTransform:rotate];
         [self updateImageViewOrigin];
         [UIView commitAnimations];
     }
@@ -192,20 +197,6 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
 	
 	UIWindow* window = [[UIApplication sharedApplication] keyWindow];
 	CGRect windowFrame = window.bounds;
-//	switch ([[window rootViewController] interfaceOrientation]) {
-//		case UIInterfaceOrientationLandscapeLeft:
-//		case UIInterfaceOrientationLandscapeRight: {
-//			CGFloat tmp = windowFrame.size.width;
-//			windowFrame.size.width = windowFrame.size.height;
-//			windowFrame.size.height = tmp;
-//			break;}
-//		default:
-//			// 交換不要。
-//			break;
-//	}
-//	UIScrollView* scrollView = [[UIScrollView alloc] initWithFrame:windowFrame];
-	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-
 	CinematicContainerView* view = [[CinematicContainerView alloc] initWithFrame:windowFrame];
 	[window addSubview:view];
 
@@ -221,13 +212,10 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
     CGRect scrollViewRect = [self.superview convertRect:self.frame toView:view];
     UIScrollView* scrollView = [[UIScrollView alloc] initWithFrame:scrollViewRect];
     [scrollView addSubview:imgView];
-    //scrollView.contentSize = imgView.bounds.size;
-    //scrollView.minimumZoomScale = fminf(scrollView.bounds.size.width / self.image.size.width,
-    //                                    scrollView.bounds.size.height / self.image.size.height);
-    scrollView.maximumZoomScale = scrollView.minimumZoomScale * 5.0;
-    scrollView.zoomScale = scrollView.minimumZoomScale;
+    scrollView.maximumZoomScale = 3.0;
+    scrollView.minimumZoomScale = 1.0;
+    scrollView.zoomScale = 1.0;
 
-    //scrollView.frame = scrollViewRect;
     scrollView.delegate = view;
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [scrollView addGestureRecognizer:gesture];
@@ -251,30 +239,21 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
     CGContextRef context = UIGraphicsGetCurrentContext();
 	[UIView beginAnimations:@"anim" context:context];
     [UIView setAnimationDuration:0.4];
+    [UIView setAnimationDelegate:view];
+    [UIView setAnimationDidStopSelector:@selector(endEnteringAnimation)];
     
-	UIStatusBarStyle statusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
-	//if (statusBarStyle == UIStatusBarStyleDefault) {
-	//	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-	//	[self setStatusBarBlack:FALSE];
-	//} else {
-	//	[self setStatusBarBlack:TRUE];		
-	//}
 	[[UIApplication sharedApplication] setStatusBarHidden:TRUE withAnimation:UIStatusBarAnimationFade];
     imgView.frame = imageRect;
-    //imgView.contentMode = UIViewContentModeScaleAspectFit;
     scrollView.frame = windowFrame;
     scrollView.minimumZoomScale = 1.0f;
     scrollView.maximumZoomScale = scrollView.minimumZoomScale * 5.0;
     scrollView.zoomScale = scrollView.minimumZoomScale;
     bgView.alpha = 1.0;
-    
-    // 現在の画面の向きに合わせて最初から回転を入れる
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    if (orientation != UIDeviceOrientationPortrait) {
-        [view updateRotation:orientation];
-    }
+
     [UIView commitAnimations];
 }
+
+
 
 
 - (void)tapped:(id)sender {
@@ -289,21 +268,11 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
     [UIView beginAnimations:@"restore_anim" context:context];
     [UIView setAnimationDuration:0.3];
     [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(endAnimation)];
+    [UIView setAnimationDidStopSelector:@selector(endRestoreAnimation)];
     bgView.alpha = 0;
-    //    CGRect shrinkFrame = self.frame;
-    //    shrinkFrame.size.width = 
     
     CGRect newFrame = [self.superview convertRect:self.frame toView:view];
-    //newFrame.origin.y -= 20;
-    //imgView.contentMode = self.contentMode;
-    
-    //scrollView.zoomScale = scrollView.minimumZoomScale;
-    //[scrollView setTransform:CGAffineTransformIdentity];
-    //[scrollView zoomToRect:imgView.frame animated:NO];
-    //scrollView.contentOffset = CGPointMake(0, 0);
-    //scrollView.contentSize = imgView.bounds.size;
-    
+
     // 回転を元に戻す
     scrollView.transform = CGAffineTransformIdentity;
     // フレーム位置を調整
@@ -314,11 +283,6 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
     newImageRect.origin = scrollView.contentOffset;
     newImageRect.size = scrollView.bounds.size;
     imgView.frame = newImageRect;
-
-    //[scrollView setContentOffset:CGPointZero];
-//    imgView.frame = scrollView.frame;
-    //imgView.center = scrollView.center;
-    //scrollView.contentSize = imgView.frame.size;
     
     [UIView commitAnimations];
     
@@ -329,93 +293,14 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
 // Cinematicモードの画像をクリックしたら委譲されて呼ばれる
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event from:(CinematicContainerView*)view{
     [self tapped:view];
-    
-//	[CATransaction begin];
-//	[CATransaction setValue:^{[self endAnimation];} forKey:kCATransactionCompletionBlock];
-//	[[UIApplication sharedApplication] setStatusBarHidden:FALSE withAnimation:UIStatusBarAnimationFade];\
-//	view.blackLayer.hidden = TRUE;
-//	
-//	CGFloat imageAspect = self.image.size.width / self.image.size.height;
-//	CGFloat frameAspect = self.frame.size.width / self.frame.size.height;
-//	if (imageAspect >= frameAspect) {
-//		// 横長だ
-//		view.imageLayer.contentsRect = CGRectMake((1 - (1 / (imageAspect / frameAspect))) / 2, 0, 1 / (imageAspect / frameAspect), 1);
-//	} else {
-//		// 縦長だ
-//		view.imageLayer.contentsRect = CGRectMake(0, (1 - (imageAspect / frameAspect)) / 2, 1, (imageAspect / frameAspect));
-//	}
-//	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-//	CGRect frameRect;
-//	switch ([[[[UIApplication sharedApplication] keyWindow] rootViewController] interfaceOrientation]) {
-//		case UIInterfaceOrientationLandscapeLeft:
-//		case UIInterfaceOrientationLandscapeRight: 
-//			frameRect = CGRectMake(statusBarSize.width, 0, view.bounds.size.width - statusBarSize.width, view.bounds.size.height);
-//			break;
-//		default:
-//			frameRect = CGRectMake(0, statusBarSize.height, view.bounds.size.width, view.bounds.size.height - statusBarSize.height);
-//			break;
-//	}
-//	view.imageLayer.frame = frameRect;
-//	view.imageLayer.bounds = self.frame;
-//	
-//	
-//
-//	[CATransaction commit];
 }
 
-- (void) endAnimation {
+- (void) endRestoreAnimation {
 	if (![self statusBarBlack]) {
 		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 	}
 	[[self temporaryView] removeFromSuperview];
 	[self setTemporaryView:nil];
-}
-
-CGAffineTransform getTransform(UIImage *image)
-{
-	CGAffineTransform transform = CGAffineTransformIdentity;	
-	UIImageOrientation orient = image.imageOrientation;
-	switch(orient) {
-			
-		case UIImageOrientationUp: //EXIF = 1
-			transform = CGAffineTransformIdentity;
-			break;
-			
-		case UIImageOrientationUpMirrored: //EXIF = 2
-			transform = CGAffineTransformScale(transform, -1.0, 1.0);
-			break;
-			
-		case UIImageOrientationDown: //EXIF = 3
-			transform = CGAffineTransformRotate(transform, M_PI);
-			break;
-			
-		case UIImageOrientationDownMirrored: //EXIF = 4
-			transform = CGAffineTransformScale(transform, 1.0, -1.0);
-			break;
-			
-		case UIImageOrientationLeftMirrored: //EXIF = 5
-			transform = CGAffineTransformScale(transform, -1.0, 1.0);
-			transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
-			break;
-			
-		case UIImageOrientationLeft: //EXIF = 6
-			transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
-			break;
-			
-		case UIImageOrientationRightMirrored: //EXIF = 7
-			transform = CGAffineTransformMakeScale(-1.0, 1.0);
-			transform = CGAffineTransformRotate(transform, M_PI / 2.0);
-			break;
-			
-		case UIImageOrientationRight: //EXIF = 8
-			transform = CGAffineTransformRotate(transform, M_PI / 2.0);
-			break;
-			
-		default:
-			[NSException raise:NSInternalInconsistencyException format:@"Invalid image orientation"];
-			
-	}
-	return transform;
 }
 
 @end
