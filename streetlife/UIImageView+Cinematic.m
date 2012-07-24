@@ -185,8 +185,6 @@ static char cinematicAddr, showCinematicAddr, tempViewAddr, statusBarStyleAddr;
 
 // UIImageViewをタッチしたら呼ばれる
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-	NSLog(@"%@", [[UIDevice currentDevice] uniqueIdentifier]);
-	
 	if (!self.cinematic) {
 		[self.nextResponder touchesEnded:touches withEvent:event];
 		return;
